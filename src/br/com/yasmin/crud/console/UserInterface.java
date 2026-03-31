@@ -117,7 +117,46 @@ public class UserInterface {
                         }
                     }
                     break;
+                case 2:
+                    String emailUserToBeUpdated;
+                    int optionToUpdate;
+                    while (true)
+                    {
+                        System.out.println("Enter the email of the user you want to update");
+                        emailUserToBeUpdated = sc.nextLine();
+                        try {
+                            User j = userController.getUserByEmail(emailUserToBeUpdated);
+                            System.out.println("Welcome mr/ms " + j.getName() + " what would you like to do?");
+                            System.out.println("1- Update Email\n 2- Update name\n 3- Update age");
+                            optionToUpdate = getInput();
+                            switch (optionToUpdate)
+                            {
+                                case 1:
+                                    while (true)
+                                    { try {
+                                        System.out.println("What's the new email? ");
+                                        String newEmail = sc.nextLine();
+                                        userController.UpdateUserEmail(j.getId(), newEmail);
+                                        break;
+                                    } catch (Exception e) {
+                                        if (e.getClass() == EmailAlreadyExistis.class) {
+                                            System.out.println("Email already exists, try again");
+                                        }}
 
+
+                                    }
+
+                            }
+
+                            break;
+                        }
+                        catch (IllegalArgumentException e)
+                        {
+                            System.out.println(e.getMessage() + " Try again");
+                        }
+                    }
+
+                    break;
                 case 6:
                     System.exit(0);
                     break;

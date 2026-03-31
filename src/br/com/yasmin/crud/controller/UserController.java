@@ -23,4 +23,13 @@ public class UserController
         return  userServices.getAllUsers();
     }
 
+    public User getUserByEmail(String email)
+    {
+        return userServices.getUserByEmail(email);
+    }
+    public void UpdateUserEmail(String id, String newEmail)
+    {
+        userServices.updateUserEmail(id, newEmail);
+    }
+
 }

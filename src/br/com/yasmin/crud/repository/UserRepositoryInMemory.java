@@ -42,8 +42,6 @@ public class UserRepositoryInMemory implements UserRepository {
     public User findByEmail(String email) {
         for (User user : users) {
             if(user.getEmail().equals(email)) {
-                System.out.println(users.size());
-                System.out.println(user);
                 return user;
             }
 

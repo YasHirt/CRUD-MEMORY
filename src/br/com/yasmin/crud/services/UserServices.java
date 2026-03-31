@@ -37,13 +37,8 @@ public class UserServices {
         {
             throw new IllegalArgumentException(" Age is negative or 0");
         }
-        if (userRepository.findByEmail(u.getEmail()) != null)
-        {
-            throw new EmailAlreadyExistis("Email Already Exists");
-        }
+        verifyIfEmailIsUnique(u.getEmail());
         userRepository.save(u);
-        //verifyIfEmailIsUnique(u.getEmail());
-        //userRepository.save(u);
 
     }
     public void deleteUser(String id)
