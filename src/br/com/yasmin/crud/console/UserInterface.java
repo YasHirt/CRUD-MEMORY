@@ -1,6 +1,7 @@
 package br.com.yasmin.crud.console;
 import br.com.yasmin.crud.controller.UserController;
 import br.com.yasmin.crud.exceptions.EmailAlreadyExistis;
+import br.com.yasmin.crud.exceptions.UserNotFoundException;
 import br.com.yasmin.crud.models.User;
 import java.util.Scanner;
 
@@ -82,12 +83,10 @@ public class UserInterface {
     }
     public void start()
     {
-         int userInput = 1;
+        int userInput = 1;
         while (true)
         {
             User u = new User();
-
-
             interfaceMenu();
             userInput = getInput();
             switch (userInput)
@@ -116,53 +115,93 @@ public class UserInterface {
 
                         }
                     }
-                    break;
+                    break; //break case 1
                 case 2:
-                    String emailUserToBeUpdated;
-                    int optionToUpdate;
-                    while (true)
-                    {
-                        System.out.println("Enter the email of the user you want to update");
-                        emailUserToBeUpdated = sc.nextLine();
+                    int optionToUpdate = 1;
+                    User h;
+                    while (true) {
                         try {
-                            User j = userController.getUserByEmail(emailUserToBeUpdated);
-                            System.out.println("Welcome mr/ms " + j.getName() + " what would you like to do?");
-                            System.out.println("1- Update Email\n 2- Update name\n 3- Update age");
-                            optionToUpdate = getInput();
-                            switch (optionToUpdate)
-                            {
-                                case 1:
-                                    while (true)
-                                    { try {
-                                        System.out.println("What's the new email? ");
-                                        String newEmail = sc.nextLine();
-                                        userController.UpdateUserEmail(j.getId(), newEmail);
-                                        break;
-                                    } catch (Exception e) {
-                                        if (e.getClass() == EmailAlreadyExistis.class) {
-                                            System.out.println("Email already exists, try again");
-                                        }}
-
-
-                                    }
-
-                            }
-
+                            System.out.println("What's the email of the user you want to update?");
+                            String EmailToBeFound = sc.nextLine();
+                             h = userController.getUserByEmail(EmailToBeFound);
                             break;
-                        }
-                        catch (IllegalArgumentException e)
-                        {
-                            System.out.println(e.getMessage() + " Try again");
+                        } catch (UserNotFoundException e) {
+                            System.out.println("User not found with this email, try again");
                         }
                     }
+                    System.out.println("Welcome mr/ms " + h.getName() + " what would you like to do?");
+                    System.out.println("1- Update email\n2- Update name\n3- Update age");
+                    optionToUpdate = getInput();
+                    switch (optionToUpdate)
+                    {
+                        case 1:
+                            while (true)
+                            {
+                                try {
+                                    System.out.println("Enter your new email");
+                                    String newEmail = sc.nextLine();
+                                    userController.UpdateUserEmail(h.getId(),  newEmail);
+                                    break;
+                                } catch (EmailAlreadyExistis e) {
+                                    System.out.println(e.getMessage() + "try again");
+                                }
+                            }
 
-                    break;
-                case 6:
-                    System.exit(0);
-                    break;
+                            break; //break case 1
+                        case 2:
+                        while (true)
+                        {
+                            try {
+                                System.out.println("What is your new name? ");
+                                String newName = sc.nextLine();
+                                userController.UpdateUserName(h.getId(),  newName);
+                                break;
+                            } catch (Exception e) {
+                                System.out.println(e.getMessage() + "try again");
+                            }
+                        }
+                        break; //break case 2
+                            case 3:
+                                while (true)
+                                {
+                                    try {
+                                        int newAge;
+                                        System.out.println("What is your new age? ");
+                                        newAge = Integer.parseInt(sc.nextLine());
+                                        userController.UpdateUserAge(h.getId(),  newAge);
+                                        break;
+                                    } catch (Exception e) {
+                                        System.out.println(e.getMessage() + "try again");
+                                    }
+                                }
+
+
+                                break; //break case 3
+                    }
+
+                break; //break case 2
+
+
                 case 4:
                     System.out.println(userController.ReadUsers().toString());
                     break;
+                case 5:
+                    while (true) {
+                        try {
+                            System.out.println("What's the email of the user you wanna find? ");
+                            String email = sc.nextLine();
+                            User k = userController.getUserByEmail(email);
+                            System.out.println(k.toString());
+                            break;
+                        } catch (Exception e) {
+                            System.out.println(e.getMessage() + " Try again");
+                        }
+
+                    }
+                case 6:
+                    System.exit(0);
+                    break;
+
             }
 
 

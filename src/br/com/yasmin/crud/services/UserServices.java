@@ -19,7 +19,7 @@ public class UserServices {
         User user = userRepository.getUserById(id);
         if (user == null)
         {
-            throw new IllegalArgumentException("User not found");
+            throw new UserNotFoundException("User not found");
         }
         return user;
     }
@@ -86,7 +86,7 @@ public class UserServices {
        User u = userRepository.findByEmail(email);
        if (u == null)
         {
-            throw new IllegalArgumentException("User not found with this email");
+            throw new UserNotFoundException("User not found with this email");
         }
         return u;
     }

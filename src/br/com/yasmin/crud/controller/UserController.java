@@ -31,5 +31,13 @@ public class UserController
     {
         userServices.updateUserEmail(id, newEmail);
     }
+    public void UpdateUserName(String id, String newName)
+    {
+        userServices.updateUserName(id, newName);
+    }
+    public void UpdateUserAge(String id, int newAge)
+    {
+        userServices.updateUserAge(id, newAge);
+    }
 
 }
