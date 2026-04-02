@@ -41,11 +41,11 @@ public class UserInterface {
                 System.out.println("Enter your name");
                 String userName = sc.nextLine();
                 if (userName.isBlank()){
-                    throw new RuntimeException("Username is null or blank");
+                    throw new IllegalArgumentException("Username is null or blank");
                 }
                 return userName;
             }
-            catch(Exception e)
+            catch(IllegalArgumentException e)
             {
                 System.out.println("ERROR: " + e.getMessage());
             }
@@ -61,11 +61,11 @@ public class UserInterface {
                 System.out.println("Enter your email");
                 String userEmail = sc.nextLine();
                 if (userEmail.isBlank()){
-                    throw new RuntimeException("Email is null or blank");
+                    throw new IllegalArgumentException("Email is null or blank");
                 }
                 return userEmail;
             }
-            catch(Exception e)
+            catch(IllegalArgumentException e)
                 {
                 System.out.println("ERROR: " + e.getMessage());
                 }
@@ -73,23 +73,24 @@ public class UserInterface {
     }
     public int  setUserAge()
     {
-        while(true)
-        {
-            try
-            {
-                System.out.println("Enter your age");
-                int userAge = Integer.parseInt(sc.nextLine());
-                if (userAge < 0 || userAge > 100){
-                    throw new RuntimeException("Invalid Age");
+        System.out.println("Enter your AGE");
+        int userAge;
+        while (true) {
+            try {
+                userAge = Integer.parseInt(sc.nextLine());
+                if (userAge < 0 || userAge > 100) {
+                    System.out.println("Invalid age, try again");
+                    userAge = Integer.parseInt(sc.nextLine());
                 }
-                return userAge;
+                else {
+                    return userAge;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Age not numeric, try again");
             }
-            catch(Exception e)
-                {
-                System.out.println("ERROR: " + e.getMessage());
-                }
         }
     }
+
     public void start()
     {
         System.out.println("What would you like to do?");
