@@ -129,7 +129,7 @@ public class UserInterface {
                 User k = userController.getUserByEmail(email);
                 System.out.println(k.toString());
                 break;
-            } catch (Exception e) {
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage() + " Try again");
             }
 
@@ -156,7 +156,7 @@ public class UserInterface {
                 }
             }
         }
-        System.out.println("Welcome mr/ms " + h.getName() + " what would you like to do?");
+        System.out.println("Welcome " + h.getName() + " what would you like to do?");
         System.out.println("1- Update email\n2- Update name\n3- Update age");
         optionToUpdate = getInputInt(1, 3);
         switch (optionToUpdate) {
@@ -184,7 +184,7 @@ public class UserInterface {
                         userController.updateUserName(h.getId(), newName);
                         System.out.println("Name updated successfully");
                         break;
-                    } catch (Exception e) {
+                    } catch (IllegalArgumentException e) {
                         System.out.println(e.getMessage() + " try again");
                     }
                 }
@@ -220,7 +220,7 @@ public class UserInterface {
         }
         public void handleDeleteUser()
         {
-            User deletion = new User();
+            User deletion;
             System.out.println("What is the email of the user you wanna delete? ");
             String email = sc.nextLine();
             while (true)
@@ -233,12 +233,13 @@ public class UserInterface {
                     email = sc.nextLine();
                 }
             }
-            System.out.println("User found, are you sure you want to delete: " + deletion.getName() + "Email: " + deletion.getEmail());
-            System.out.println("1- Yes\n 2- No");
+            System.out.println("User found, are you sure you want to delete  " + deletion.getName() + " | Email: " + deletion.getEmail());
+            System.out.println("1- Yes\n2- No");
             int decision = getInputInt(1,2);
             switch (decision) {
                 case 1:
                     userController.deleteUser(deletion.getId());
+                    System.out.println("User deleted successfully");
                     break;
                     case 2:
                         return;
