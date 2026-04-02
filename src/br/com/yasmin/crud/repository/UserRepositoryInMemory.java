@@ -26,11 +26,7 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public void deleteUserById(String id) {
-        for (User user : users) {
-            if (user.getId().equals(id)) {
-                users.remove(user);
-            }
-        }
+        users.remove(getUserById(id));
 
     }
     @Override

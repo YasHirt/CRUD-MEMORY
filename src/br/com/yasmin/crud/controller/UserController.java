@@ -37,5 +37,9 @@ public class UserController
     {
         userServices.updateUserAge(id, newAge);
     }
+    public void deleteUser(String id)
+    {
+        userServices.deleteUser(id);
+    }
 
 }

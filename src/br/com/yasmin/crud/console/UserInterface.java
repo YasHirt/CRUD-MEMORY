@@ -102,16 +102,19 @@ public class UserInterface {
             {
                 case 1:
                     handleCreateUser();
-                    break; //break case 1
+                    break;
                 case 2:
                     handleUpdateUser();
-                    break; //break case 2
+                    break;
+                case 3:
+                    handleDeleteUser();
+                    break;
                 case 4:
                     System.out.println(userController.readUsers().toString());
                     break;
                 case 5:
                     handleFindUserByEmail();
-                    break; //break case 5
+                    break;
                 case 6:
                     System.exit(0);
                     break;
@@ -192,12 +195,14 @@ public class UserInterface {
                     }
                     break;
                 case 3:
-                   h.setAge(setUserAge());
-                   System.out.println("Age updated successfully");
-                   break;
-
+                    try {
+                        userController.updateUserAge(h.getId(), setUserAge());
+                        System.out.println("Age updated successfully");
+                    } catch (IllegalArgumentException e) {
+                        System.out.println(e.getMessage() + " try again");
+                    }
+                    break;
             }
-
         }
         else
         {
@@ -222,5 +227,32 @@ public class UserInterface {
                     u.setEmail(setUserEmail());
             }
         }
+        }
+        public void handleDeleteUser()
+        {
+            User deletion = new User();
+            System.out.println("What is the email of the user you wanna delete? ");
+            String email = sc.nextLine();
+            while (true)
+            {
+                try {
+                    deletion = userController.getUserByEmail(email);
+                    break;
+                } catch (UserNotFoundException e) {
+                    System.out.println("User not found with this email, try again");
+                    email = sc.nextLine();
+                }
+            }
+            System.out.println("User found, are you sure you want to delete: " + deletion.getName() + "Email: " + deletion.getEmail());
+            System.out.println("1- Yes\n 2- No");
+            int decision = getInputInt(1,2);
+            switch (decision) {
+                case 1:
+                    userController.deleteUser(deletion.getId());
+                    break;
+                    case 2:
+                        return; //sai do método
+            }
+
         }
 }
