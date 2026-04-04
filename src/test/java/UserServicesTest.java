@@ -1,3 +1,4 @@
+import br.com.yasmin.crud.exceptions.EmailAlreadyExistsException;
 import br.com.yasmin.crud.exceptions.UserNotFoundException;
 import br.com.yasmin.crud.models.User;
 import br.com.yasmin.crud.repository.UserRepository;
@@ -15,7 +16,7 @@ class UserServicesTest {
     void shouldThrowExceptionWhenNameIsNull(){
         User u = new User();
         u.setAge(21);
-        u.setEmail("Yasmin23");
+        u.setEmail("YasminEmail");
         u.setName(null);
         assertThrows(IllegalArgumentException.class, () ->
         {
@@ -26,7 +27,7 @@ class UserServicesTest {
     void shouldThrowExceptionWhenNameIsBlank(){
         User u = new User();
         u.setAge(21);
-        u.setEmail("Yasmin23");
+        u.setEmail("YasminEmail");
         u.setName("   ");
         assertThrows(IllegalArgumentException.class, () ->
         {
@@ -57,7 +58,51 @@ class UserServicesTest {
         }
         );
     }
-
+    @Test
+    void shouldThrowExceptionWhenAgeIsNegative()
+    {
+        User u = new User("Yasmin", "YasminEmail", -1);
+        assertThrows(IllegalArgumentException.class, () ->
+        {
+            userServices.registerUser(u);
+        }
+        );
+    }
+    @Test
+    void shouldThrowExceptionWhenAgeIsZero()
+    {
+        User u = new User("Yasmin", "YasminEmail", 0);
+        assertThrows(IllegalArgumentException.class, () ->
+        {
+            userServices.registerUser(u);
+        }
+        );
+    }
+    @Test
+    void shouldThrowExceptionWhenEmailAlreadyExists()
+    {
+        User u = new User("Yasmin", "YasminEmail", 1);
+        User j = new User("Yasmin2", "YasminEmail", 2);
+        userRepository.save(u);
+        assertThrows(EmailAlreadyExistsException.class, () ->
+        {
+            userServices.registerUser(j);
+        });
+    }
+    @Test
+    void shouldNotChangeAmountOfUsersWhenEmailAlreadyExists()
+    {
+        User u = new User("Yasmin", "YasminEmail", 1);
+        User j = new User("Yasmin2", "YasminEmail", 2);
+        userRepository.save(u);
+        int amountOfUsersBeforeFailing = userServices.getAllUsers().size();
+        assertThrows(EmailAlreadyExistsException.class, () ->
+        {
+            userServices.registerUser(j);
+        });
+        int amountOfUsersAfterFailing = userServices.getAllUsers().size();
+        assertEquals(amountOfUsersBeforeFailing, amountOfUsersAfterFailing);
+    }
     @Test
     void shouldThrowExceptionWhenUserDoesNotExist()
     {
