@@ -49,6 +49,7 @@ public class UserServices {
         validatesUserExists(id);
         userRepository.deleteUserById(id);
     }
+
     public void updateUserName(String id, String newName)
     {
         validatesUserExists(id);

@@ -6,6 +6,8 @@ import br.com.yasmin.crud.repository.UserRepositoryInMemory;
 import br.com.yasmin.crud.services.UserServices;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 //verificar se ele nao deveria estar em uma pasta chamada userservieces
 class UserServicesTest {
@@ -102,6 +104,52 @@ class UserServicesTest {
         });
         int amountOfUsersAfterFailing = userServices.getAllUsers().size();
         assertEquals(amountOfUsersBeforeFailing, amountOfUsersAfterFailing);
+    }
+    @Test
+    void shouldThrowExceptionWhenUserToDeleteNotFound()
+    {
+        String nonExistingId = "99999L";
+        assertThrows(UserNotFoundException.class, () ->
+        {
+            userServices.deleteUser(nonExistingId);
+        });
+    }
+    @Test
+    void shouldNotAffectOtherUsersWhenDeletingUser()
+    {
+        User u = new User("Yasmin", "YasminEmail", 1);
+        User j = new User("Yasmin2", "YasminEmail2", 2);
+        userServices.registerUser(u);
+        userServices.registerUser(j);
+
+        int sizeBefore = userServices.getAllUsers().size();
+
+        User userBeforeDeletion = userServices.getUserByEmail(u.getEmail());
+        String userBeforeDeletionEmail = userBeforeDeletion.getEmail();
+        String userBeforeDeletionName = userBeforeDeletion.getName();
+        String userBeforeDeletionId = userBeforeDeletion.getId();
+        int userBeforeDeletionAge = userBeforeDeletion.getAge();
+        userServices.deleteUser(j.getId());
+
+        int sizeAfter = userServices.getAllUsers().size();
+
+        User userAfterDeletion = userServices.getUserByEmail(u.getEmail());
+        String userAfterDeletionEmail = userAfterDeletion.getEmail();
+        String userAfterDeletionName = userAfterDeletion.getName();
+        String userAfterDeletionId = userAfterDeletion.getId();
+        int userAfterDeletionAge = userAfterDeletion.getAge();
+        assertEquals(sizeBefore - 1, sizeAfter);
+        assertEquals(userBeforeDeletionAge, userAfterDeletionAge);
+        assertEquals(userBeforeDeletionEmail, userAfterDeletionEmail);
+        assertEquals(userBeforeDeletionName, userAfterDeletionName);
+        assertEquals(userBeforeDeletionId, userAfterDeletionId);
+        assertThrows(UserNotFoundException.class, () ->
+        {
+            userServices.getUserByEmail(j.getEmail());
+        });
+
+
+
     }
     @Test
     void shouldThrowExceptionWhenUserDoesNotExist()
