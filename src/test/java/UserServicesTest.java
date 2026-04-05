@@ -6,8 +6,6 @@ import br.com.yasmin.crud.repository.UserRepositoryInMemory;
 import br.com.yasmin.crud.services.UserServices;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 //verificar se ele nao deveria estar em uma pasta chamada userservieces
 class UserServicesTest {
@@ -152,13 +150,25 @@ class UserServicesTest {
 
     }
     @Test
-    void shouldThrowExceptionWhenUserDoesNotExist()
+   void shouldNotBeAbleToUpdateNameOfNonExistingUser()
     {
-
-        String nonExistingId = "99999L";
+        String nonExistingId = "99";
+        String newName = "NewName";
         assertThrows(UserNotFoundException.class, () ->
         {
-            userServices.updateUserName(nonExistingId, "Novo nome");
+            userServices.updateUserName(nonExistingId,newName);
         });
+    }
+    @Test
+    void shouldNotChangeEmailIfOnlyChangedName()
+    {
+        User u = new User("Yasmin", "YasminEmail", 1);
+        userServices.registerUser(u);
+        String emailBefore = u.getEmail();
+        userServices.updateUserName(u.getId(), "NewName");
+        User u2 = userServices.getUserByEmail(u.getEmail());
+        String emailAfter = u2.getEmail();
+        assertEquals(emailBefore, emailAfter);
+
     }
 }
