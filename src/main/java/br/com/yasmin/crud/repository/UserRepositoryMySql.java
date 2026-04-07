@@ -1,22 +1,23 @@
 package br.com.yasmin.crud.repository;
 import java.sql.*;
-import java.util.Objects;
-
 import io.github.cdimascio.dotenv.Dotenv;
 public class UserRepositoryMySql {
-    public static void main(String[] args)
-    {
-        try {
-            Dotenv dotenv = Dotenv.load();
-            String username = Objects.requireNonNull(dotenv.get("DB_USERNAME"), "DB_USERNAME is null");
-            String password = Objects.requireNonNull(dotenv.get("DB_PASSWORD"), "DB_PASSWORD is null");
-            String url = Objects.requireNonNull(dotenv.get("DB_URL"), "DB_URL is null");
-            Connection myConn = DriverManager.getConnection(url, username, password);
 
-        }catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
+    private final String url;
+    private final String user;
+    private final String password;
+   public  UserRepositoryMySql(String url, String user, String password) {
+       this.url = url;
+       this.user = user;
+       this.password = password;
+   }
+   private  Connection getConnection(){
+       try {
+           Connection myConn = DriverManager.getConnection(url, user, password);
+           return myConn;
+       } catch (SQLException e) {
+           throw  new RuntimeException(e);
+       }
+   }
 }
 
