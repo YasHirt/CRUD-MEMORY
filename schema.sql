@@ -1,1 +1,6 @@
 CREATE DATABASE demo;
+CREATE TABLE users (
+    id VARCHAR(36) PRIMARY KEY,
+    name VARCHAR(36),
+    email VARCHAR(36) UNIQUE NOT NULL
+);

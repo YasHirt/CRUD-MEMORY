@@ -3,15 +3,22 @@ import br.com.yasmin.crud.exceptions.UserNotFoundException;
 import br.com.yasmin.crud.models.User;
 import br.com.yasmin.crud.repository.UserRepository;
 import br.com.yasmin.crud.repository.UserRepositoryInMemory;
+import br.com.yasmin.crud.repository.UserRepositoryMySql;
 import br.com.yasmin.crud.services.UserServices;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 //verificar se ele nao deveria estar em uma pasta chamada userservieces
 class UserServicesTest {
+    Dotenv dotenv = Dotenv.load();
+    String url = dotenv.get("DB_URL");
+    String username = dotenv.get("DB_USERNAME");
+    String password = dotenv.get("DB_PASSWORD");
     UserRepository userRepository = new UserRepositoryInMemory();
     UserServices userServices = new UserServices(userRepository);
-
+    //to do:
+    //Verificar validade dos testes para repositório do banco
     @Test
     void shouldThrowExceptionWhenNameIsNull(){
         User u = new User();
