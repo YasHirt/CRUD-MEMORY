@@ -132,7 +132,16 @@ public class UserInterface {
             } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage() + " Try again");
             }
-
+            catch(UserNotFoundException e) {
+                System.out.println(e.getMessage() + " What would you like to do?\n 1- Exit to main menu\n 2- Try again");
+                int option = getInputInt(1,2);
+                switch (option) {
+                    case 1:
+                        return;
+                        case 2:
+                            break;
+                }
+            }
         }
     }
 
