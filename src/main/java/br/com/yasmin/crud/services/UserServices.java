@@ -19,7 +19,7 @@ public class UserServices {
            }
     }
     private User validatesUserExists(String id) {
-        User user = userRepository.getUserById(id);
+        User user = userRepository.findUserById(id);
         if (user == null)
         {
             throw new UserNotFoundException("User not found");
@@ -57,7 +57,7 @@ public class UserServices {
         {
             throw new IllegalArgumentException("New name is null or blank");
         }
-        User u = userRepository.getUserById(id);
+        User u = userRepository.findUserById(id);
         userRepository.updateName(u.getId(), newName);
     }
 

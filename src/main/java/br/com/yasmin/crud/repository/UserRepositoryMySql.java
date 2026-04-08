@@ -31,7 +31,7 @@ public class UserRepositoryMySql implements UserRepository
     }
 
     @Override
-    public User getUserById(String id) {
+    public User findUserById(String id) {
         String query = "SELECT * FROM users WHERE id = ?";
         try(Connection conn = getConnection();
             PreparedStatement stmt = conn.prepareStatement(query))
@@ -41,7 +41,7 @@ public class UserRepositoryMySql implements UserRepository
                 if (rs.next()) {
                     return mapRow(rs);
                 }
-                throw new UserNotFoundException("User not found with this id");
+               return null;
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error getting user by id", e);
@@ -89,7 +89,7 @@ public class UserRepositoryMySql implements UserRepository
                 if (rs.next()) {
                     return mapRow(rs);
                 }
-                throw  new UserNotFoundException("User not found with this email");
+                return null;
             }
         } catch (SQLException e) {
             throw new DatabaseException("Error getting user by email", e);

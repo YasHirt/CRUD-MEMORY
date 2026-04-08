@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface UserRepository {
     public void save(User user);
-    public User getUserById(String id);
+    public User findUserById(String id);
     public void deleteUserById(String id);
     public List<User> getAllUsers();
     public User findByEmail(String email);

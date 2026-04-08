@@ -17,7 +17,7 @@ public class UserRepositoryInMemory implements UserRepository {
     }
 
     @Override
-    public User getUserById(String id) {
+    public User findUserById(String id) {
         for (User user : users) {
             if (user.getId().equals(id)) {
                 return user;
@@ -28,7 +28,7 @@ public class UserRepositoryInMemory implements UserRepository {
 
     @Override
     public void deleteUserById(String id) {
-        users.remove(getUserById(id));
+        users.remove(findUserById(id));
 
     }
     @Override
