@@ -12,13 +12,13 @@ import static org.junit.jupiter.api.Assertions.*;
 //verificar se ele nao deveria estar em uma pasta chamada userservieces
 class UserServicesTest {
     Dotenv dotenv = Dotenv.load();
-    String url = dotenv.get("DB_URL");
-    String username = dotenv.get("DB_USERNAME");
-    String password = dotenv.get("DB_PASSWORD");
-    UserRepository userRepository = new UserRepositoryInMemory();
+    String url = dotenv.get("DB_URL_TEST");
+    String username = dotenv.get("DB_USERNAME_TEST");
+    String password = dotenv.get("DB_PASSWORD_TEST");
+    UserRepository userRepository = new UserRepositoryMySql(url, username, password);
+    //UserRepository userRepository = new UserRepositoryInMemory();
     UserServices userServices = new UserServices(userRepository);
-    //to do:
-    //Verificar validade dos testes para repositório do banco
+
     @Test
     void shouldThrowExceptionWhenNameIsNull(){
         User u = new User();
@@ -88,9 +88,9 @@ class UserServicesTest {
     @Test
     void shouldThrowExceptionWhenEmailAlreadyExists()
     {
-        User u = new User("Yasmin", "YasminEmail", 1);
-        User j = new User("Yasmin2", "YasminEmail", 2);
-        userRepository.save(u);
+        User u = new User("Yasmin", "YasminEmailToBeDoubled", 1);
+        User j = new User("Yasmin2", "YasminEmailToBeDoubled", 2);
+        userServices.registerUser(u);
         assertThrows(EmailAlreadyExistsException.class, () ->
         {
             userServices.registerUser(j);
@@ -99,8 +99,8 @@ class UserServicesTest {
     @Test
     void shouldNotChangeAmountOfUsersWhenEmailAlreadyExists()
     {
-        User u = new User("Yasmin", "YasminEmail", 1);
-        User j = new User("Yasmin2", "YasminEmail", 2);
+        User u = new User("Yasmin", "YasminEmailNovo", 1);
+        User j = new User("Yasmin2", "YasminEmailNovo", 2);
         userRepository.save(u);
         int amountOfUsersBeforeFailing = userServices.getAllUsers().size();
         assertThrows(EmailAlreadyExistsException.class, () ->
@@ -122,7 +122,7 @@ class UserServicesTest {
     @Test
     void shouldNotAffectOtherUsersWhenDeletingUser()
     {
-        User u = new User("Yasmin", "YasminEmail", 1);
+        User u = new User("Yasmin", "YasminEmailForDeletion", 1);
         User j = new User("Yasmin2", "YasminEmail2", 2);
         userServices.registerUser(u);
         userServices.registerUser(j);
@@ -169,7 +169,7 @@ class UserServicesTest {
     @Test
     void shouldNotChangeEmailIfOnlyNameChanged()
     {
-        User u = new User("Yasmin", "YasminEmail", 1);
+        User u = new User("Yasmin", "YasminEmailForEmailChange", 1);
         userServices.registerUser(u);
         String emailBefore = u.getEmail();
         userServices.updateUserName(u.getId(), "NewName");
@@ -193,7 +193,7 @@ class UserServicesTest {
     void shouldThrowExceptionWhenNewNameIsBlank()
     {
 
-        User u = new User("Yasmin", "YasminEmail", 1);
+        User u = new User("Yasmin", "YasminEmailForNewNameBlank", 1);
         userServices.registerUser(u);
         assertThrows(IllegalArgumentException.class, () ->
         {
